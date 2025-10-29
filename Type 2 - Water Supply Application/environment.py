@@ -1,7 +1,7 @@
 # environment_type2.py
 
 import numpy as np
-import config_type2 as config
+import config as config
 import random
 
 class WaterSupplyEnvironment:
@@ -168,8 +168,18 @@ class WaterSupplyEnvironment:
         self.satisfaction_records = np.ones((self.num_households, 2))
         for i in range(self.num_households):
             self.satisfaction_records[i] = self.satisfaction_records[i] / np.linalg.norm(self.satisfaction_records[i])
-
-        self.water_tanks = np.full(self.num_households, config.TANK_CAPACITY / 2.0)
-        self.time_of_day = 0
-
+        
+        # CHANGE THIS LINE:
+        # self.water_tanks = np.full(self.num_households, config.TANK_CAPACITY / 2.0)
+        
+        # TO THIS (randomize initial tanks):
+        self.water_tanks = np.random.uniform(
+            config.TANK_CAPACITY * 0.3, 
+            config.TANK_CAPACITY * 0.7, 
+            size=self.num_households
+        )
+        
+        self.time_of_day = random.randint(0, 23)  # Also randomize start time
+        
         return self.get_augmented_state()
+

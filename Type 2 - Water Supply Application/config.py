@@ -13,28 +13,29 @@ DEMAND_PROFILES = {
 }
 
 # Water resource availability (time-varying, insufficient to meet all demands)
-RESOURCE_MULTIPLIER = 1.5  # Total resource = multiplier * max(all demands)
+RESOURCE_MULTIPLIER = 2  # Total resource = multiplier * max(all demands)
 
 # Tank capacity per household (gallons)
 TANK_CAPACITY = 200
 
 # Satisfaction threshold: if (supply + reserve) / demand >= threshold, satisfied
-SATISFACTION_THRESHOLD_RATIO = 0.8  # 80% of demand met
+SATISFACTION_THRESHOLD_RATIO = 0.7  # 80% of demand met
 
 # --- FAIRO Algorithm Settings ---
 DELTA = 0.05  # Weight adjustment step size
 ZETA = 0.5  # Fairness-utility tradeoff parameter
-SATISFACTION_INCREMENT = 0.01  # Increment for satisfaction counters
+SATISFACTION_INCREMENT = 0.05  # Increment for satisfaction counters
 
 # --- DQN Agent Settings ---
 BUFFER_SIZE = 10000
 BATCH_SIZE = 64
 GAMMA = 0.99
-EPSILON_START = 0.9
 EPSILON_END = 0.05
-EPSILON_DECAY = 1000
-LEARNING_RATE = 1e-4
-TARGET_UPDATE = 10
+EPSILON_START = 0.95  # More exploration initially
+EPSILON_DECAY = 2000  # Slower decay
+LEARNING_RATE = 5e-4  # Faster learning
+TARGET_UPDATE = 5  # More frequent target updates
+
 
 # --- Training Settings ---
 NUM_EPISODES = 500

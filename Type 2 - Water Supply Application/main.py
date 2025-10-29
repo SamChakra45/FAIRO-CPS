@@ -142,11 +142,23 @@ def run_fairo_type2():
             L_i_previous = previous_L_values[i]
 
             # Fairness term F_i
-            absolute_fairness = (2 * L_i_current) - 1
+            # Fairness term F_i (Equation 14)
+            absolute_fairness = (2 * L_i_current) - 1  # Maps [0,1] to [-1,1]
+
+            # CHANGE THIS LINE:
+            # L_i_improvement = L_i_current - L_i_previous
+            # option_improvement = np.tanh(L_i_improvement * 100)
+
+            # TO THIS (more aggressive fairness improvement reward):
             L_i_improvement = L_i_current - L_i_previous
-            option_improvement = np.tanh(L_i_improvement * 100)
+            if L_i_improvement > 0:
+                option_improvement = min(1.0, L_i_improvement * 200)  # Stronger positive reward
+            else:
+                option_improvement = max(-1.0, L_i_improvement * 50)  # Gentler negative penalty
+
             F_i = absolute_fairness + option_improvement
             F_i = np.clip(F_i, -1.0, 1.0)
+
 
             # Performance term P_i
             satisfaction_records = env.get_satisfaction_records()
