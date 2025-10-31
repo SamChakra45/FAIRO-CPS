@@ -47,7 +47,7 @@ plt.tight_layout()
 plt.savefig("fairness_state_min.png")
 plt.show()
 
-argmax = np.argmax([L1, L2, L3], axis=0)  # 0 for Room1, etc.
+argmax = np.argmax([L1, L2, L3], axis=0)  
 argmin = np.argmin([L1, L2, L3], axis=0)
 counts_max = Counter(argmax)
 counts_min = Counter(argmin)

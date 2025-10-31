@@ -1,5 +1,3 @@
-# main.py
-
 import torch
 import numpy as np
 import config
@@ -52,11 +50,6 @@ def calculate_performance_term(satisfaction_records, human_idx, L_prev, L_curr):
 def run_fairo():
     #Main FAIRO training loop.
 
-    # print("="*80)
-    # print("FAIRO: Fairness-aware Adaptation in Sequential-Decision Making")
-    # print("Type 1 Application: Smart Home HVAC")
-    # print("="*80)
-
     all_L1 = []
     all_L2 = []
     all_L3 = []
@@ -68,9 +61,6 @@ def run_fairo():
     previous_L_values = np.zeros(config.N_HUMANS)
 
     episode_rewards = []
-
-    # print(f"\nStarting training for {config.NUM_EPISODES} episodes...")
-    # print(f"Each episode has {config.STEPS_PER_EPISODE} steps\n")
 
     for episode in range(config.NUM_EPISODES):
         state = env.reset()
@@ -152,10 +142,6 @@ def run_fairo():
                   f"Avg Reward: {avg_reward:6.3f} | "
                   f"Weights: [{', '.join([f'{w:.2f}' for w in weights])}] | "
                   f"Fairness L: [{', '.join([f'{L:.3f}' for L in base_fairness])}]")
-
-    # print("\n" + "="*80)
-    # print("Training completed!")
-    # print("="*80)
 
     # Final evaluation
     final_state = env.get_augmented_state()

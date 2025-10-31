@@ -1,5 +1,3 @@
-# environment.py
-
 import numpy as np
 import config
 import random
@@ -60,7 +58,7 @@ class SmartHomeEnvironment:
         for i in range(self.num_humans):
             error = np.abs(global_action - desired_setpoints[i])
 
-            # Check if human i is satisfied (within threshold)
+            # Check if human i is satisfied 
             if error <= config.SATISFACTION_THRESHOLD:
                 self.satisfaction_records[i, 0] += config.SATISFACTION_INCREMENT
             else:
