@@ -119,7 +119,7 @@ import torch.optim as optim
 import random
 import numpy as np
 from collections import namedtuple, deque
-import config_type3 as config
+import config as config
 
 # Define the structure of an experience tuple
 Transition = namedtuple('Transition', ('state', 'action', 'reward', 'next_state'))

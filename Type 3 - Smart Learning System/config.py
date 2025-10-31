@@ -38,7 +38,7 @@ STATE_VALUES = {
 # --- FAIRO Algorithm Settings ---
 DELTA = 0.05  # Weight adjustment step size
 ZETA = 0.5  # Fairness-utility tradeoff parameter
-SATISFACTION_INCREMENT = 0.01  # Increment for satisfaction counters
+SATISFACTION_INCREMENT = 0.03  # Increment for satisfaction counters
 
 # --- DQN Agent Settings ---
 BUFFER_SIZE = 10000

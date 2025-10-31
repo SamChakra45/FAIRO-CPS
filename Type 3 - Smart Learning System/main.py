@@ -66,6 +66,10 @@ def run_fairo_type3():
     print("FAIRO: Type 3 Application - Smart Learning with VR")
     print("="*80)
 
+    all_L1 = []
+    all_L2 = []
+    all_L3 = []
+
     # Initialize environment
     env = SmartLearningEnvironment(num_students=config.N_STUDENTS)
 
@@ -102,6 +106,9 @@ def run_fairo_type3():
 
             # Get fairness state
             base_fairness_state = state[:-1]
+            all_L1.append(base_fairness_state[0])
+            all_L2.append(base_fairness_state[1])
+            all_L3.append(base_fairness_state[2])
             l_flag = state[-1]
 
             # Choose active option (minimum L_i)
@@ -209,6 +216,11 @@ def run_fairo_type3():
     print(f"\nFairness Metrics:")
     print(f"  Mean L: {ideal_fairness:.4f} (closer to 1.0 is better)")
     print(f"  Variance: {fairness_variance:.6f} (closer to 0 is better)")
+
+    # SAVE FAIRNESS TRACES FOR PLOTTING
+    np.save('L1_trace.npy', np.array(all_L1))
+    np.save('L2_trace.npy', np.array(all_L2))
+    np.save('L3_trace.npy', np.array(all_L3))
 
     # Save models
     for idx, agent in enumerate(dqn_agents):

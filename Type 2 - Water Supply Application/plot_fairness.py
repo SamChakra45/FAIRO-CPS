@@ -9,9 +9,9 @@ timesteps = np.arange(len(L1))
 
 plt.figure(figsize=(8, 4))
 plt.title("Fairness state $s_t$")
-plt.plot(timesteps, L1, label="Room1")
-plt.plot(timesteps, L2, label="Room2")
-plt.plot(timesteps, L3, label="Room3")
+plt.plot(timesteps, L1, label="Household1")
+plt.plot(timesteps, L2, label="Household2")
+plt.plot(timesteps, L3, label="Household3")
 plt.xlabel("time step")
 plt.ylabel("fairness state ($L$)")
 plt.legend()
@@ -52,7 +52,7 @@ argmin = np.argmin([L1, L2, L3], axis=0)
 counts_max = Counter(argmax)
 counts_min = Counter(argmin)
 
-labels = ['Room1', 'Room2', 'Room3']
+labels = ['Household1', 'Household2', 'Household3']
 sizes_max = [counts_max[i]/len(argmax)*100 for i in range(3)]
 sizes_min = [counts_min[i]/len(argmin)*100 for i in range(3)]
 

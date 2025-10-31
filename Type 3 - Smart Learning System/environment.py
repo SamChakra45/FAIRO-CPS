@@ -1,7 +1,7 @@
 # environment_type3.py
 
 import numpy as np
-import config_type3 as config
+import config as config
 import random
 
 class SmartLearningEnvironment:
@@ -13,9 +13,18 @@ class SmartLearningEnvironment:
 
     def __init__(self, num_students=config.N_STUDENTS):
         self.num_students = num_students
-
-        # Satisfaction history records: c_i = (u^+_i, u^-_i)
-        self.satisfaction_records = np.ones((self.num_students, 2))
+    
+        # START WITH DIVERSE SATISFACTION RECORDS
+        # Student 0: mostly satisfied (0.9, 0.1)
+        # Student 1: neutral (0.5, 0.5)
+        # Student 2: mostly unsatisfied (0.2, 0.8)
+        self.satisfaction_records = np.array([
+            [0.9, 0.1],
+            [0.5, 0.5],
+            [0.2, 0.8]
+        ])
+        
+        # Normalize to unit vectors
         for i in range(self.num_students):
             self.satisfaction_records[i] = self.satisfaction_records[i] / np.linalg.norm(self.satisfaction_records[i])
 
@@ -179,12 +188,16 @@ class SmartLearningEnvironment:
             done: Whether episode is done
         """
         learning_experiences = np.zeros(self.num_students)
-
-        # Apply global action to all students
+        
         for i in range(self.num_students):
             current_state = self.student_states[i]
             profile = self.student_profiles[i]
-
+            
+            # DEGRADATION: With 20% probability, degrade state before action
+            if np.random.random() < 0.2 and current_state > 1:
+                current_state = max(1, current_state - 1)
+                self.student_states[i] = current_state
+            
             # State transition based on global action
             next_state = self.transitions[profile][current_state][global_action]
 
@@ -199,12 +212,12 @@ class SmartLearningEnvironment:
             self.student_states[i] = next_state
 
             # Check satisfaction: LE >= 0 means satisfied
-            if learning_experience >= 0:
-                # Satisfied: increment u^+
-                self.satisfaction_records[i, 0] += config.SATISFACTION_INCREMENT
-            else:
-                # Unsatisfied: increment u^-
-                self.satisfaction_records[i, 1] += config.SATISFACTION_INCREMENT
+        if learning_experience >= 0.5:  # Stricter threshold
+            # Satisfied
+            self.satisfaction_records[i, 0] += config.SATISFACTION_INCREMENT
+        else:
+            # Unsatisfied
+            self.satisfaction_records[i, 1] += config.SATISFACTION_INCREMENT
 
             # Normalize to unit vector
             norm = np.linalg.norm(self.satisfaction_records[i])
@@ -224,11 +237,21 @@ class SmartLearningEnvironment:
 
     def reset(self):
         """Reset the environment to initial state"""
-        self.satisfaction_records = np.ones((self.num_students, 2))
+        # Reset with diverse satisfaction (create fairness problem)
+        self.satisfaction_records = np.array([
+            [0.9, 0.1],
+            [0.5, 0.5],
+            [0.2, 0.8]
+        ])
+        
         for i in range(self.num_students):
             self.satisfaction_records[i] = self.satisfaction_records[i] / np.linalg.norm(self.satisfaction_records[i])
-
-        # Initialize student states randomly (state 1 or 3)
-        self.student_states = np.random.choice([1, 3], size=self.num_students)
-
+        
+        # Initialize student states with diversity
+        # Student 0: state 6 (good)
+        # Student 1: state 4 (medium)
+        # Student 2: state 2 (poor)
+        self.student_states = np.array([6, 4, 2])
+        
         return self.get_augmented_state()
+
